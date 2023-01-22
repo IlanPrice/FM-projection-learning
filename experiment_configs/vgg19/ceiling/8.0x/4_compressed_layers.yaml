@@ -1,0 +1,61 @@
+dataset:
+  imagenet_path: ./data/imagenet
+optimizer:
+  optimizer: sgd
+  lr: 0.01
+  lr_scheduler: reduce_on_plateau
+  lr_scheduler_args:
+    mode: max
+    factor: 0.5
+    patience: 4
+    threshold: 0.001
+    threshold_mode: abs
+    min_lr: 0.0005
+model:
+  model_path: ./models/imagenet/vgg19/ceiling/8.0x/model_3_compressed_layers_post.ckpt
+  existing_sketch_dicts:
+    ? !!python/tuple
+    - features
+    - 3
+    : conv: !!python/tuple
+      - 64
+      - 8
+    ? !!python/tuple
+    - features
+    - 7
+    : conv: !!python/tuple
+      - 64
+      - 32
+    ? !!python/tuple
+    - features
+    - 10
+    : conv: !!python/tuple
+      - 128
+      - 32
+  sketch_dicts:
+    ? !!python/tuple
+    - features
+    - 17
+    : conv: !!python/tuple
+      - 256
+      - 128
+  unfreeze_all_sketches: true
+  freeze_model: true
+  sketch_init: default
+  sketch_type: post_act
+  batchnorm: false
+  arch: vgg19
+train:
+  save_model: true
+  save_dir: ./models/imagenet/vgg19/ceiling/8.0x/
+  model_filename: model_4_compressed_layers_post
+  log_dir: ./logs/vgg19/ceiling/8.0x/
+  version: 0
+  num_gpus: 8
+  batch_size: 256
+  num_workers: 10
+  epochs: 4
+  target_accuracy: 74.21
+evaluate:
+  batch_size: 256
+seed: 99
